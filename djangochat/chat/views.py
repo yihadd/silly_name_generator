@@ -33,7 +33,7 @@ def generate_name(request):
         'last_name': last_name
     })
     # Add CORS headers for cross-domain requests
-    response["Access-Control-Allow-Origin"] = "*"  # Allow all domains (not recommended for production)
+    response["Access-Control-Allow-Origin"] = "https://yihadd.github.io/silly_name_generator/"  # Allow all domains (not recommended for production)
     response["Access-Control-Allow-Methods"] = "GET"
     response["Access-Control-Allow-Headers"] = "Content-Type"
     return response

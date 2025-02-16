@@ -101,7 +101,7 @@
     <script>
         let currentName = '';
 
-        // Move the name lists to the frontend
+        // Thai name lists
         const FIRST_NAMES = [
             'ป้าพริก', 'ลุงกระเทียม', 'น้าหอม', 'ป้าส้มตำ', 'ลุงข้าวผัด',
             'น้องหมูกรอบ', 'พี่แกงส้ม', 'คุณต้มยำ', 'น้าผัดไทย', 'ป้าทอดมัน',
@@ -143,22 +143,41 @@
             "NAME แม่ใช้ให้เด็ดพริก 10 เม็ด แต่ฉันเด็ด 11 เม็ด เพราะฉันเด็ดเกิน 🌶️"
         ];
 
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
         function generateName() {
-            // Generate random name locally instead of using API
-            const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)];
-            const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)];
+            // Generate random name
+            const firstName = getRandomElement(FIRST_NAMES);
+            const lastName = getRandomElement(LAST_NAMES);
             currentName = `${firstName} ${lastName}`;
-            document.getElementById('nameDisplay').textContent = currentName;
+            
+            // Update the display
+            const nameDisplay = document.getElementById('nameDisplay');
+            if (nameDisplay) {
+                nameDisplay.textContent = currentName;
+            }
+            
+            return currentName;
         }
 
         function showFinalName() {
-            document.getElementById('lastGeneratedName').textContent = currentName;
+            const lastGeneratedName = document.getElementById('lastGeneratedName');
+            if (lastGeneratedName) {
+                lastGeneratedName.textContent = currentName;
+            }
             
             // Generate random funny quote
             const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
             const personalizedQuote = randomQuote.replace('NAME', `<span class="name-highlight">${currentName}</span>`);
-            document.getElementById('funnyQuote').innerHTML = personalizedQuote;
             
+            const funnyQuoteElement = document.getElementById('funnyQuote');
+            if (funnyQuoteElement) {
+                funnyQuoteElement.innerHTML = personalizedQuote;
+            }
+            
+            // Show/hide elements
             document.getElementById('finalName').style.display = 'block';
             document.getElementById('nameDisplay').style.display = 'none';
             document.querySelector('.generate-btn').style.display = 'none';
@@ -175,8 +194,10 @@
             generateName();
         }
 
-        // Generate a name when page loads
-        generateName();
+        // Generate initial name when page loads
+        window.onload = function() {
+            generateName();
+        };
     </script>
 </body>
 </html> 

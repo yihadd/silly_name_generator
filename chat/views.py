@@ -1,42 +1,37 @@
-from django.shortcuts import render, redirect
-from chat.models import Room, Message
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.http import JsonResponse
+import random
 
-# Create your views here.
+# Lists of Thai first and last names (with funny/silly meanings)
+FIRST_NAMES = (
+    'ป้าพริก', 'ลุงกระเทียม', 'น้าหอม', 'ป้าส้มตำ', 'ลุงข้าวผัด',
+    'น้องหมูกรอบ', 'พี่แกงส้ม', 'คุณต้มยำ', 'น้าผัดไทย', 'ป้าทอดมัน',
+    'ลุงกล้วยทอด', 'พี่ขนมจีน', 'น้องข้าวเหนียว', 'คุณมะม่วง', 'ป้าทุเรียน',
+    'ลุงมะพร้าว', 'น้าสับปะรด', 'พี่แตงโม', 'คุณส้มโอ', 'ป้าลำไย',
+    'น้องมังคุด', 'พี่ระกำ', 'คุณลิ้นจี่', 'ป้าเงาะ', 'ลุงขนุน',
+    'น้าน้ำปลา', 'พี่ซีอิ๊ว', 'คุณพริกไทย', 'ป้าขิง', 'ลุงข่า'
+)
+
+LAST_NAMES = (
+    'กินจุ', 'อิ่มดี', 'หิวจัง', 'อร่อยจริง', 'เผ็ดมาก',
+    'หวานใจ', 'เปรี้ยวปาก', 'ขมนิด', 'เค็มนิดหน่อย', 'จืดชืด',
+    'มันมาก', 'ชาบู', 'สุกี้', 'บุฟเฟ่ต์', 'กินได้',
+    'ทานเก่ง', 'หม้อไฟ', 'ย่างเนย', 'ต้มแซ่บ', 'ผัดเผ็ด',
+    'แกงป่า', 'ลาบก้อย', 'น้ำตก', 'ส้มตำ', 'ยำยำ',
+    'ต้มยำ', 'แกงเขียว', 'ผัดกะเพรา', 'ราดหน้า', 'ผัดซีอิ๊ว'
+)
+
 def home(request):
     return render(request, 'home.html')
 
-def room(request, room):
-    username = request.GET.get('username')
-    room_details = Room.objects.get(name=room)
-    return render(request, 'room.html', {
-        'username': username,
-        'room': room,
-        'room_details': room_details
+def generate_name(request):
+    first_name = random.choice(FIRST_NAMES)
+    last_name = random.choice(LAST_NAMES)
+    
+    return JsonResponse({
+        'first_name': first_name,
+        'last_name': last_name
     })
 
-def checkview(request):
-    room = request.POST['room_name']
-    username = request.POST['username']
-
-    if Room.objects.filter(name=room).exists():
-        return redirect('/'+room+'/?username='+username)
-    else:
-        new_room = Room.objects.create(name=room)
-        new_room.save()
-        return redirect('/'+room+'/?username='+username)
-
-def send(request):
-    message = request.POST['message']
-    username = request.POST['username']
-    room_id = request.POST['room_id']
-
-    new_message = Message.objects.create(value=message, user=username, room=room_id)
-    new_message.save()
-    return HttpResponse('Message sent successfully')
-
-def getMessages(request, room):
-    room_details = Room.objects.get(name=room)
-
-    messages = Message.objects.filter(room=room_details.id)
-    return JsonResponse({"messages":list(messages.values())})
+# Remove unused functions
+# Removing: room, checkview, send, getMessages

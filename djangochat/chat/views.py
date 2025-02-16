@@ -28,10 +28,15 @@ def generate_name(request):
     first_name = random.choice(FIRST_NAMES)
     last_name = random.choice(LAST_NAMES)
     
-    return JsonResponse({
+    response = JsonResponse({
         'first_name': first_name,
         'last_name': last_name
     })
+    # Add CORS headers for cross-domain requests
+    response["Access-Control-Allow-Origin"] = "*"  # Allow all domains (not recommended for production)
+    response["Access-Control-Allow-Methods"] = "GET"
+    response["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
 
 # Remove unused functions
 # Removing: room, checkview, send, getMessages

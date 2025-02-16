@@ -87,9 +87,9 @@
         
         <div class="generated-name" id="nameDisplay"></div>
         
-        <button class="generate-btn">Generate New Name</button>
-        <button class="quit-btn">Quit</button>
-        <button class="restart-btn" id="restartBtn">Start Again</button>
+        <button class="generate-btn" onclick="generateName()">Generate New Name</button>
+        <button class="quit-btn" onclick="showFinalName()">Quit</button>
+        <button class="restart-btn" onclick="restart()" id="restartBtn">Start Again</button>
 
         <div class="final-name" id="finalName">
             <p>Your final generated name was:</p>
@@ -143,46 +143,24 @@
             "NAME แม่ใช้ให้เด็ดพริก 10 เม็ด แต่ฉันเด็ด 11 เม็ด เพราะฉันเด็ดเกิน 🌶️"
         ];
 
-        function getRandomElement(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
-
         function generateName() {
-            try {
-                // Generate random name
-                const firstName = getRandomElement(FIRST_NAMES);
-                const lastName = getRandomElement(LAST_NAMES);
-                currentName = `${firstName} ${lastName}`;
-                
-                // Update the display
-                const nameDisplay = document.getElementById('nameDisplay');
-                if (nameDisplay) {
-                    nameDisplay.textContent = currentName;
-                    console.log('Generated name:', currentName); // Debug log
-                } else {
-                    console.error('nameDisplay element not found');
-                }
-            } catch (error) {
-                console.error('Error generating name:', error);
-            }
+            // Get random first and last name
+            const randomFirst = Math.floor(Math.random() * FIRST_NAMES.length);
+            const randomLast = Math.floor(Math.random() * LAST_NAMES.length);
+            
+            // Combine the names
+            currentName = FIRST_NAMES[randomFirst] + ' ' + LAST_NAMES[randomLast];
+            
+            // Display the name
+            document.getElementById('nameDisplay').textContent = currentName;
         }
 
         function showFinalName() {
-            const lastGeneratedName = document.getElementById('lastGeneratedName');
-            if (lastGeneratedName) {
-                lastGeneratedName.textContent = currentName;
-            }
-            
-            // Generate random funny quote
+            document.getElementById('lastGeneratedName').textContent = currentName;
             const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
             const personalizedQuote = randomQuote.replace('NAME', `<span class="name-highlight">${currentName}</span>`);
+            document.getElementById('funnyQuote').innerHTML = personalizedQuote;
             
-            const funnyQuoteElement = document.getElementById('funnyQuote');
-            if (funnyQuoteElement) {
-                funnyQuoteElement.innerHTML = personalizedQuote;
-            }
-            
-            // Show/hide elements
             document.getElementById('finalName').style.display = 'block';
             document.getElementById('nameDisplay').style.display = 'none';
             document.querySelector('.generate-btn').style.display = 'none';
@@ -199,29 +177,8 @@
             generateName();
         }
 
-        // Add event listeners when the document is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            // Generate initial name
-            generateName();
-
-            // Add click event listener to the generate button
-            const generateButton = document.querySelector('.generate-btn');
-            if (generateButton) {
-                generateButton.addEventListener('click', generateName);
-            }
-
-            // Add click event listener to the quit button
-            const quitButton = document.querySelector('.quit-btn');
-            if (quitButton) {
-                quitButton.addEventListener('click', showFinalName);
-            }
-
-            // Add click event listener to the restart button
-            const restartButton = document.getElementById('restartBtn');
-            if (restartButton) {
-                restartButton.addEventListener('click', restart);
-            }
-        });
+        // Generate initial name when page loads
+        generateName();
     </script>
 </body>
 </html> 

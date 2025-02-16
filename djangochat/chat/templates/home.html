@@ -148,18 +148,23 @@
         }
 
         function generateName() {
-            // Generate random name
-            const firstName = getRandomElement(FIRST_NAMES);
-            const lastName = getRandomElement(LAST_NAMES);
-            currentName = `${firstName} ${lastName}`;
-            
-            // Update the display
-            const nameDisplay = document.getElementById('nameDisplay');
-            if (nameDisplay) {
-                nameDisplay.textContent = currentName;
+            try {
+                // Generate random name
+                const firstName = getRandomElement(FIRST_NAMES);
+                const lastName = getRandomElement(LAST_NAMES);
+                currentName = `${firstName} ${lastName}`;
+                
+                // Update the display
+                const nameDisplay = document.getElementById('nameDisplay');
+                if (nameDisplay) {
+                    nameDisplay.textContent = currentName;
+                    console.log('Generated name:', currentName); // Debug log
+                } else {
+                    console.error('nameDisplay element not found');
+                }
+            } catch (error) {
+                console.error('Error generating name:', error);
             }
-            
-            return currentName;
         }
 
         function showFinalName() {
@@ -194,10 +199,29 @@
             generateName();
         }
 
-        // Generate initial name when page loads
-        window.onload = function() {
+        // Add event listeners when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate initial name
             generateName();
-        };
+
+            // Add click event listener to the generate button
+            const generateButton = document.querySelector('.generate-btn');
+            if (generateButton) {
+                generateButton.addEventListener('click', generateName);
+            }
+
+            // Add click event listener to the quit button
+            const quitButton = document.querySelector('.quit-btn');
+            if (quitButton) {
+                quitButton.addEventListener('click', showFinalName);
+            }
+
+            // Add click event listener to the restart button
+            const restartButton = document.getElementById('restartBtn');
+            if (restartButton) {
+                restartButton.addEventListener('click', restart);
+            }
+        });
     </script>
 </body>
 </html> 

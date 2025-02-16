@@ -25,9 +25,15 @@ jobs:
         
     - name: Collect Static Files
       run: python manage.py collectstatic --noinput
-      
+        
+    - name: Create index.html
+      run: |
+        cp chat/templates/home.html staticfiles/index.html
+        
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./staticfiles 
+        publish_dir: ./staticfiles
+        enable_jekyll: false
+        force_orphan: true 
